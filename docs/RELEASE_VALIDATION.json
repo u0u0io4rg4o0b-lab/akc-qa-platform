@@ -1,0 +1,41 @@
+{
+  "version": "0.4.0-preview.1",
+  "date": "2026-11-03",
+  "environment": {
+    "os": "Darwin",
+    "machine": "arm64",
+    "python": "3.14.5"
+  },
+  "tool_tests": {
+    "passed": 20,
+    "total": 20,
+    "scope": "author same-host tool controls"
+  },
+  "sample_checks": {
+    "passed": 5,
+    "total": 5,
+    "scope": "real bundled local discount CLI only"
+  },
+  "clean_copy_unicode_path": "PASS_IN_TOOL_TEST",
+  "external_project_root": "PASS_IN_TOOL_TEST",
+  "relocated_evidence_without_subject": "PASS_IN_TOOL_TEST",
+  "claude_client": "NOT_TESTED",
+  "independent_review": "NOT_PERFORMED",
+  "windows_native": "NOT_TESTED",
+  "linux_native": "NOT_TESTED",
+  "friend_machine": "NOT_TESTED",
+  "security_audit": "NOT_PERFORMED",
+  "source_hashes": {
+    "qa.py": "cdeb03b9291bf90547c7b0757e65dd1f961231a8248351bd157dc4bfd938eb94",
+    "tests/test_workflow.py": "1202e67668304b13dcaf3e52012834451ead61baf42f12890bff461b25728e64",
+    "examples/discount/discount.py": "38ef4ff31ea36c079f87767e3808c669844915e3103586d92eceb77bad034158",
+    "examples/discount/qa-task.json": "61b152266a9487cad10e932e071629e74d22a3da1c8d0bc4044f0e7af51dbc0b"
+  },
+  "preserved_pre_release_failure": {
+    "scope": "receipt metadata",
+    "finding": "stdout limit incorrectly marked empty stderr as truncated",
+    "before_fix": "targeted control failed as expected",
+    "after_fix": "20/20 tool controls passed",
+    "historical_results_preserved": true
+  }
+}

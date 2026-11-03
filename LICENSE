@@ -1,0 +1,45 @@
+AKC Personal Noncommercial Source-Available License 1.0
+SPDX-License-Identifier: LicenseRef-AKC-Personal-Noncommercial-1.0
+
+Copyright (c) 2026 AKC QA Platform authors.
+
+1. Permission. Subject to these terms, you may download, copy, study, run,
+   modify, and share this software and its source code solely as a natural
+   person for your own personal, noncommercial learning, experimentation,
+   and testing of personal projects. You may retain personal modifications.
+   Shared copies and modifications must retain this license and copyright
+   notices, identify modifications, and remain subject to these same terms.
+   This permission includes noncommercial repository forks and source sharing.
+
+2. Restrictions. You may not use this software or its derivatives to earn
+   revenue, perform paid or compensated QA or other services, support a
+   commercial product or project, conduct business or organizational
+   operations (including internal operations), offer hosted or managed
+   services, resell, sublicense on broader terms, or operate it for others.
+   These restrictions also apply to indirect commercial benefit. Any such
+   use requires a separate prior written license from the relevant rights
+   holder. No automatic conversion to a commercial or unrestricted license
+   occurs over time.
+
+3. Scope. This license covers only material for which the licensors have
+   authority to grant these rights. Third-party software retains its own
+   license. Your tested projects and reports do not become licensed under
+   these terms merely because you use this software. No trademark rights
+   or rights to access, test, disclose, or change another person's systems,
+   accounts, or data are granted.
+
+4. Termination. Permission ends upon violation of these terms. Rights not
+   expressly granted are reserved. No permission to remove these limits
+   from a derivative is granted.
+
+5. Disclaimer. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+   KIND, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A
+   PARTICULAR PURPOSE AND NONINFRINGEMENT. TO THE EXTENT PERMITTED BY
+   APPLICABLE LAW, THE AUTHORS AND RIGHTS HOLDERS ARE NOT LIABLE FOR ANY
+   CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM USE OF THE SOFTWARE.
+
+This is a custom source-available license, not an OSI-approved open-source
+license. The English terms above govern. Chinese convenience summary:
+允許自然人為自己的個人非商業學習與專案測試下載、執行、修改及分享，
+並保留相同授權。禁止營收、付費服務、商業專案、公司／組織營運、
+代營運或託管服務；另行取得書面授權者除外。工具按現狀提供，無保證。

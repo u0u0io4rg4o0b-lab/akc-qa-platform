@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "project": {"name": "個人折扣練習", "version": "1"},
+  "scope": {"included": ["整數 CLI 的折扣與非法輸入"], "excluded": ["小數與幣別", "網站與資料庫", "付款"]},
+  "files": ["discount.py", "REQUIREMENTS.md", "qa-task.json"],
+  "requirements": [
+    {"id": "R01", "text": "整數折扣與 0/100 邊界符合公式", "source": "REQUIREMENTS.md R01"},
+    {"id": "R02", "text": "非法輸入拒絕", "source": "REQUIREMENTS.md R02"}
+  ],
+  "checks": [
+    {"id": "C01", "requirement_id": "R01", "description": "一般折扣", "argv": ["{python}", "-I", "-B", "{project}/discount.py", "100", "10"], "timeout_seconds": 5, "expected_exit": 0, "mode": "json_equals", "expected_json": {"cents": 90}},
+    {"id": "C02", "requirement_id": "R01", "description": "0% 邊界", "argv": ["{python}", "-I", "-B", "{project}/discount.py", "100", "0"], "timeout_seconds": 5, "expected_exit": 0, "mode": "json_equals", "expected_json": {"cents": 100}},
+    {"id": "C03", "requirement_id": "R01", "description": "100% 邊界", "argv": ["{python}", "-I", "-B", "{project}/discount.py", "100", "100"], "timeout_seconds": 5, "expected_exit": 0, "mode": "json_equals", "expected_json": {"cents": 0}},
+    {"id": "C04", "requirement_id": "R02", "description": "非法折扣是事前定義的負向正例", "argv": ["{python}", "-I", "-B", "{project}/discount.py", "100", "101"], "timeout_seconds": 5, "expected_exit": 2, "mode": "json_equals", "expected_json": {"error": "invalid input"}},
+    {"id": "C05", "requirement_id": "R02", "description": "負金額拒絕", "argv": ["{python}", "-I", "-B", "{project}/discount.py", "-1", "10"], "timeout_seconds": 5, "expected_exit": 2, "mode": "json_equals", "expected_json": {"error": "invalid input"}}
+  ]
+}
