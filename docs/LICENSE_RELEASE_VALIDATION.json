@@ -29,7 +29,6 @@
   "native_evidence": "prior exact-source Windows/macOS/Linux results conditionally retained; no new native execution claimed",
   "rights_review": "no observed blocking third-party code/contributor conflict; legal title/AI-output copyrightability not certified",
   "independent_cross_client_review": "NOT_PERFORMED",
-  "commercial_pilot": "NOT_STARTED_TARGET_AND_AUTHORIZATION_NOT_NAMED",
   "actual_local_checks": [
     {
       "name": "help",
@@ -86,5 +85,7 @@
     "relative_links_checked": 23,
     "bounded_private_path_key_patterns": "NO_MATCH_NOT_SECURITY_AUDIT",
     "changed_core_functions": false
-  }
+  },
+  "new_pilot_this_turn": "NOT_PERFORMED_AND_NOT_REQUIRED_FOR_GITHUB_FIX",
+  "future_usage_feedback": "Developers may use their own authorized projects and voluntarily report results. No newly named maintainer pilot or feedback submission is required."
 }

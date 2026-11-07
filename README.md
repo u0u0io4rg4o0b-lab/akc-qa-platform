@@ -42,4 +42,4 @@ preview.2 修正 Windows 報告換行及 CLI 輸出編碼，補上失敗原因�
 
 特定檢查 PASS、證據 MATCH、整體需求符合、正式驗收與獨立安全審計，是五個不同結論。前兩者不自動證明後三者；MATCH 也不代表不可偽造或已有獨立見證。使用者保有自己產品、資料、報告及最終決策的相應權利與責任。
 
-[操作與任務格式](docs/TASK_FORMAT.md) · [架構與驗收](docs/DESIGN.md) · [版本與證據範圍](docs/STATUS.md) · [本次授權變更驗證](docs/LICENSE_RELEASE_VALIDATION.json) · [商業專案試用 Gate](docs/COMMERCIAL_PILOT.md) · [資料與問題回報](SECURITY.md)
+[操作與任務格式](docs/TASK_FORMAT.md) · [架構與驗收](docs/DESIGN.md) · [版本與證據範圍](docs/STATUS.md) · [本次授權變更驗證](docs/LICENSE_RELEASE_VALIDATION.json) · [後續使用與自願回饋](docs/COMMERCIAL_PILOT.md) · [資料與問題回報](SECURITY.md)
