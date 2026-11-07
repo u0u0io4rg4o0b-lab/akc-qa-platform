@@ -1,41 +1,50 @@
 {
-  "version": "0.4.0-preview.1",
-  "date": "2026-11-03",
-  "environment": {
-    "os": "Darwin",
-    "machine": "arm64",
-    "python": "3.14.5"
-  },
-  "tool_tests": {
-    "passed": 20,
-    "total": 20,
-    "scope": "author same-host tool controls"
-  },
-  "sample_checks": {
-    "passed": 5,
-    "total": 5,
-    "scope": "real bundled local discount CLI only"
-  },
-  "clean_copy_unicode_path": "PASS_IN_TOOL_TEST",
-  "external_project_root": "PASS_IN_TOOL_TEST",
-  "relocated_evidence_without_subject": "PASS_IN_TOOL_TEST",
-  "claude_client": "NOT_TESTED",
-  "independent_review": "NOT_PERFORMED",
-  "windows_native": "NOT_TESTED",
-  "linux_native": "NOT_TESTED",
-  "friend_machine": "NOT_TESTED",
-  "security_audit": "NOT_PERFORMED",
+  "version": "0.4.0-preview.2",
+  "date": "2026-11-08",
   "source_hashes": {
-    "qa.py": "cdeb03b9291bf90547c7b0757e65dd1f961231a8248351bd157dc4bfd938eb94",
-    "tests/test_workflow.py": "1202e67668304b13dcaf3e52012834451ead61baf42f12890bff461b25728e64",
-    "examples/discount/discount.py": "38ef4ff31ea36c079f87767e3808c669844915e3103586d92eceb77bad034158",
-    "examples/discount/qa-task.json": "61b152266a9487cad10e932e071629e74d22a3da1c8d0bc4044f0e7af51dbc0b"
+    "qa.py": "0c39e9b1550d74c832dbfedf8af32560c438b6e9e43dd7d5e6983eb820b1a997",
+    "tests/test_workflow.py": "ccb447bdafd42c964998810f8c1e4ee34a2292bfd0f8a7a85a2cf636e4da1427",
+    "tools/validate_release.py": "6e3a5fdb3afcb62f6726b8ccecda1401034812b02a5b77c3ec727fd3222be7ac",
+    ".github/workflows/portable-qa.yml": "d252b07f088094fb96a00c7a42f22f0538eaec02b15ae293346c2c898ea4fc06"
   },
-  "preserved_pre_release_failure": {
-    "scope": "receipt metadata",
-    "finding": "stdout limit incorrectly marked empty stderr as truncated",
-    "before_fix": "targeted control failed as expected",
-    "after_fix": "20/20 tool controls passed",
-    "historical_results_preserved": true
-  }
+  "local_validation": {
+    "claim_ceiling": "HOSTED_SYNTHETIC_PLATFORM_VALIDATION_NOT_CLAUDE_OR_FRIEND_ACCEPTANCE",
+    "legacy_verifier": "LF",
+    "new_demo_passed": 5,
+    "new_report": "UTF8_LF",
+    "new_verify": "MATCH",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "predecessor_checks_passed": 5,
+    "predecessor_commit": "6d872a43380feb6c5a80e0f2f3bb71ffdc61852f",
+    "predecessor_demo_exit": 0,
+    "python": "3.14.5",
+    "tests": {
+      "errors": 0,
+      "failures": 0,
+      "passed": 30,
+      "skipped": 1,
+      "total": 31
+    }
+  },
+  "hosted_ci": "PENDING_NATIVE_RUN",
+  "friend_feedback": {
+    "status": "USER_FORWARDED_REPORT_ORIGINAL_ARTIFACTS_UNAVAILABLE",
+    "os": "Windows 11",
+    "python": "3.11.9",
+    "client": "Claude Code",
+    "version": "preview.1 with local one-line repair",
+    "tests_reported": {
+      "passed": 19,
+      "skipped": 1
+    },
+    "not_independent_maintainer_reproduction": true
+  },
+  "limitations": [
+    "Windows full process-tree cleanup not provided",
+    "pythonw desktop visual behavior not tested",
+    "friend busy-host failure causes unverified",
+    "new-version Claude and friend desktop acceptance not performed",
+    "not a security audit"
+  ],
+  "historical_release": "https://github.com/u0u0io4rg4o0b-lab/akc-qa-platform/blob/6d872a43380feb6c5a80e0f2f3bb71ffdc61852f/docs/RELEASE_VALIDATION.json"
 }

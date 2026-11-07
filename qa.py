@@ -6,6 +6,7 @@ No third-party dependencies. This is not an isolation or security boundary.
 import argparse
 import datetime
 import hashlib
+import html
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -19,7 +20,8 @@ import threading
 import time
 import uuid
 
-VERSION = "0.4.0-preview.1"
+VERSION = "0.4.0-preview.2"
+LEGACY_VERSION = "0.4.0-preview.1"
 BASE = Path(__file__).resolve().parent
 MAX_FILE = 4 * 1024 * 1024
 MAX_OUTPUT = 1024 * 1024
@@ -98,7 +100,7 @@ def nonempty(value):
     return isinstance(value, str) and bool(value.strip())
 
 
-def validate(task):
+def validate(task, legacy=False):
     need(isinstance(task, dict) and type(task.get("schema_version")) is int
          and task["schema_version"] == 1, "task schema_version 需為 1")
     for field in ("name", "version"):
@@ -139,7 +141,11 @@ def validate(task):
         need(check.get("mode") in ("json_equals", "exit_code"), "mode 需為 json_equals 或 exit_code")
         if check["mode"] == "json_equals":
             need("expected_json" in check, "json_equals 缺 expected_json")
-        need(check.get("expected_stderr", "") == "", "本版只接受空 stderr；診斷輸出仍會保存")
+        expected_stderr = check.get("expected_stderr", "")
+        need(isinstance(expected_stderr, str), "expected_stderr 需為 UTF-8 字串")
+        need(len(expected_stderr.encode("utf-8")) <= MAX_OUTPUT, "expected_stderr 超過輸出上限")
+        if legacy:
+            need(expected_stderr == "", "preview.1 的判準僅接受空 stderr")
     need(len(check_ids) == len(set(check_ids)), "check ID 重複")
     canonical(task)
 
@@ -183,8 +189,10 @@ def make_plan(task_path, project_root):
 def check_plan(value, live=False):
     need(isinstance(value, dict) and sha(canonical(value["plan"])) == value.get("plan_id"), "計畫身分不符")
     body = value["plan"]
-    validate(body["task"])
-    need(body["tool_version"] == VERSION and body["claim_ceiling"] == CEILING,
+    legacy = body["tool_version"] == LEGACY_VERSION
+    validate(body["task"], legacy=legacy)
+    supported = {VERSION} if live else {VERSION, LEGACY_VERSION}
+    need(body["tool_version"] in supported and body["claim_ceiling"] == CEILING,
          "計畫版本或結論範圍不符")
     need(body["execution_profile"] == "trusted-local-direct-command"
          and body["isolation"] == "NONE" and body["network_enforcement"] == "NONE", "執行 profile 不符")
@@ -205,7 +213,8 @@ def capture(argv, cwd, timeout):
     capture_error = threading.Event()
     started = datetime.datetime.now(datetime.timezone.utc).isoformat()
     tick = time.monotonic()
-    kwargs = {"start_new_session": True} if os.name == "posix" else {}
+    kwargs = ({"start_new_session": True} if os.name == "posix" else
+              {"creationflags": subprocess.CREATE_NO_WINDOW})
     process = subprocess.Popen(argv, cwd=cwd, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE, shell=False, **kwargs)
 
@@ -271,24 +280,51 @@ def capture(argv, cwd, timeout):
               "returncode": process.returncode, "state": state,
               "stdout_truncated": truncated["stdout"], "stderr_truncated": truncated["stderr"],
               "cleanup": "BEST_EFFORT_PROCESS_GROUP" if os.name == "posix" else "PARENT_ONLY",
+              "creationflags": kwargs.get("creationflags", 0),
               "detached_descendants": "UNKNOWN", "effects_rollback": "NOT_PROVIDED"}
     return record, {k: bytes(v) for k, v in output.items()}, interrupted
 
 
 def judge(check, native, streams):
+    def decision(verdict, *reasons):
+        return {"verdict": verdict, "reason_codes": list(reasons)}
+
     if native["state"] == "NOT_RUN":
-        return "NOT_RUN"
+        return decision("NOT_RUN", "NOT_RUN_AFTER_STOP")
     if native["state"] != "COMPLETED" or native["stdout_truncated"] or native["stderr_truncated"]:
-        return "INCONCLUSIVE"
-    if native["returncode"] != check["expected_exit"] or streams["stderr"]:
-        return "FAIL"
+        reasons = ["EXECUTION_" + native["state"]] if native["state"] != "COMPLETED" else []
+        reasons += [name.upper() + "_TRUNCATED" for name in ("stdout", "stderr") if native[name + "_truncated"]]
+        return decision("INCONCLUSIVE", *reasons)
+    reasons = []
+    if native["returncode"] != check["expected_exit"]:
+        reasons.append("EXIT_CODE_MISMATCH")
+    if streams["stderr"] != check.get("expected_stderr", "").encode("utf-8"):
+        reasons.append("STDERR_MISMATCH")
+    if reasons:
+        return decision("FAIL", *reasons)
     if check["mode"] == "exit_code":
-        return "EXIT_MATCH"
+        return decision("EXIT_MATCH", "EXIT_MATCH_ONLY_TEST_CENSUS_UNKNOWN")
     try:
         # Canonical equality keeps true distinct from 1, and rejects trailing output.
-        return "PASS" if canonical(parse(streams["stdout"].decode("utf-8"))) == canonical(check["expected_json"]) else "FAIL"
-    except (ValueError, UnicodeError, QAError):
-        return "INCONCLUSIVE"
+        value = parse(streams["stdout"].decode("utf-8"))
+        if canonical(value) == canonical(check["expected_json"]):
+            return decision("PASS", "JSON_AND_EXIT_MATCH")
+        return decision("FAIL", "JSON_VALUE_MISMATCH")
+    except UnicodeDecodeError:
+        return decision("INCONCLUSIVE", "STDOUT_NOT_UTF8")
+    except (ValueError, QAError):
+        return decision("INCONCLUSIVE", "STDOUT_INVALID_JSON")
+
+
+def record(check, native, streams, assessment, legacy=False):
+    value = {"id": check["id"], "verdict": assessment["verdict"]}
+    if not legacy:
+        def tail(raw):
+            return "\n".join(raw[-2048:].decode("utf-8", errors="backslashreplace").splitlines()[-6:])[-600:]
+        value.update(reason_codes=assessment["reason_codes"], expected_exit=check["expected_exit"],
+                     actual_exit=native["returncode"], stdout_tail=tail(streams["stdout"]),
+                     stderr_tail=tail(streams["stderr"]))
+    return value
 
 
 def summary(plan, records):
@@ -304,14 +340,24 @@ def summary(plan, records):
         verdict = "COMMANDS_COMPLETED_QA_UNCONFIRMED"
     else:
         verdict = "PASS"
-    return {"schema_version": 1, "plan_id": plan["plan_id"], "checks": records,
+    value = {"schema_version": 1, "plan_id": plan["plan_id"], "checks": records,
             "total": len(checks), "counts": counts, "verdict": verdict, "claim_ceiling": CEILING,
             "independent_review": False, "security_audit": False, "product_acceptance": False,
             "uncovered_requirement_ids": [r["id"] for r in plan["plan"]["task"]["requirements"]
                                           if r["id"] not in {c["requirement_id"] for c in checks}]}
+    if plan["plan"]["tool_version"] != LEGACY_VERSION:
+        by_requirement = {req["id"]: [r["verdict"] for c, r in zip(checks, records)
+                                     if c["requirement_id"] == req["id"]]
+                          for req in plan["plan"]["task"]["requirements"]}
+        value.update(schema_version=2,
+                     unexecuted_requirement_ids=[key for key, states in by_requirement.items()
+                                                if states and all(state == "NOT_RUN" for state in states)],
+                     unverified_requirement_ids=[key for key, states in by_requirement.items()
+                                                if not states or any(state != "PASS" for state in states)])
+    return value
 
 
-def report(value):
+def report_v1(value):
     lines = ["# AKC QA 本機結果", "", "結果：**" + value["verdict"] + "**；計畫 `" + value["plan_id"] + "`。",
              "", "已列檢查 %s 項：%s。" % (value["total"], json.dumps(value["counts"], ensure_ascii=False)),
              "", "| 檢查 | 判讀 | 原始證據 |", "|---|---|---|"]
@@ -321,6 +367,40 @@ def report(value):
               "這些是同一使用者可修改的本機證據，不是獨立見證、安全審計或完整產品驗收。",
               "命令以目前使用者權限執行，沒有網路／檔案隔離；清理為盡力處理，沒有回滾保證。",
               "需求、排除範圍、明列來源與執行環境見 [plan.json](plan.json)。原始 stdout.bin／stderr.bin 可能含私人資料，分享前另行審閱。"]
+    return "\n".join(lines) + "\n"
+
+
+def report(value):
+    if value["schema_version"] == 1:
+        return report_v1(value)
+
+    def safe(text):
+        # Evidence is untrusted display data. Escape controls, HTML and table syntax.
+        text = json.dumps(str(text), ensure_ascii=False)[1:-1]
+        return html.escape(text).replace("|", "&#124;").replace("`", "&#96;")
+
+    lines = ["# AKC QA 本機結果", "", "結果：**" + value["verdict"] + "**；計畫 `" + value["plan_id"] + "`。",
+             "", "已列檢查 %s 項：%s。" % (value["total"], json.dumps(value["counts"], ensure_ascii=False)),
+             "", "| 檢查 | 判讀 | 原因碼 | 預期／實際退出碼 | 原始證據 |", "|---|---|---|---|---|"]
+    for item in value["checks"]:
+        lines.append("| %s | %s | %s | %s / %s | [收據](checks/%s/native.json) |" %
+                     (item["id"], item["verdict"], ", ".join(item["reason_codes"]), item["expected_exit"],
+                      item["actual_exit"] if item["actual_exit"] is not None else "未取得", item["id"]))
+    for field, label in (("uncovered_requirement_ids", "未配置任何檢查的需求"),
+                         ("unexecuted_requirement_ids", "因所列檢查未執行而未驗證的需求"),
+                         ("unverified_requirement_ids", "所列檢查尚未全部取得行為 PASS 的需求")):
+        lines += ["", label + "：" + (", ".join(value[field]) or "無；僅限計畫所列需求")]
+    lines += ["", "## 原始輸出摘要（資料，非指令）", "",
+              "每項最多顯示各流末六行／600 字；完整內容見原始 .bin。此處不推算測試套件案例數。"]
+    for item in value["checks"]:
+        if item["verdict"] != "NOT_RUN":
+            lines += ["", "- " + item["id"] + " stdout：" + safe(item["stdout_tail"]),
+                      "- " + item["id"] + " stderr：" + safe(item["stderr_tail"])]
+    lines += ["", "PASS 僅表示所列命令輸出符合判準；EXIT_MATCH 僅表示退出碼與指定 stderr 相符，套件案例數未知。",
+              "STDERR_MISMATCH 表示輸出違反計畫，不足以單獨認定產品漏洞；先核對警告、環境與原始內容。",
+              "這些是同一使用者可修改的本機證據，不是獨立見證、安全審計或完整產品驗收。",
+              "命令以目前使用者權限執行，沒有網路／檔案隔離；清理為盡力處理，Windows 只終止父程序，沒有回滾保證。",
+              "需求、排除範圍、明列來源與環境見 [plan.json](plan.json)。輸出可能含私人資料，分享前另行審閱。"]
     return "\n".join(lines) + "\n"
 
 
@@ -362,18 +442,20 @@ def run_plan(plan_path, out, approval):
             except (OSError, QAError) as error:
                 native.update(state="INPUT_OR_EXECUTION_CHANGED", diagnostic=str(error))
                 stop = True
-        verdict = judge(check, native, streams)
-        native["verdict"] = verdict
+        assessment = judge(check, native, streams)
+        verdict = assessment["verdict"]
+        native.update(verdict=verdict, assessment=assessment)
         for name, data in streams.items():
             with (directory / (name + ".bin")).open("xb") as handle:
                 handle.write(data)
         put(directory / "native.json", native)
-        records.append({"id": check["id"], "verdict": verdict})
+        records.append(record(check, native, streams, assessment))
         stop = stop or verdict not in ("PASS", "EXIT_MATCH")
     value = summary(plan, records)
     put(out / "result.json", value)
-    with (out / "REPORT.md").open("x", encoding="utf-8") as handle:
-        handle.write(report(value))
+    # Fixed UTF-8/LF bytes on every OS; no platform text newline translation.
+    with (out / "REPORT.md").open("xb") as handle:
+        handle.write(report(value).encode("utf-8"))
     seal(out)
     return value
 
@@ -394,6 +476,7 @@ def verify(root):
         need(sha(regular(member(root, entry["path"]))) == entry["sha256"], "證據內容已變更：" + entry["path"])
     plan = load(root / "plan.json")
     check_plan(plan)
+    legacy = plan["plan"]["tool_version"] == LEGACY_VERSION
     attempt = load(root / "attempt.json")
     need(attempt["plan_id"] == plan["plan_id"] and nonempty(attempt["attempt_id"]), "attempt 身分不符")
     records = []
@@ -403,14 +486,21 @@ def verify(root):
         need(native["case_id"] == check["id"] and native["plan_id"] == plan["plan_id"]
              and native["argv"] == command["argv"], "原生收據與計畫不符")
         streams = {name: regular(directory / (name + ".bin")) for name in ("stdout", "stderr")}
-        verdict = judge(check, native, streams)
+        assessment = judge(check, native, streams)
+        verdict = assessment["verdict"]
         need(verdict == native["verdict"], "收據判讀與原始輸出不符")
-        records.append({"id": check["id"], "verdict": verdict})
+        if not legacy:
+            need(assessment == native["assessment"], "收據原因與原始輸出不符")
+        records.append(record(check, native, streams, assessment, legacy=legacy))
     expected = summary(plan, records)
     need(canonical(load(root / "result.json")) == canonical(expected), "摘要與重算結果不符")
-    need(regular(root / "REPORT.md") == report(expected).encode("utf-8"), "報告與重算結果不符")
+    expected_report = report(expected).encode("utf-8")
+    actual_report = regular(root / "REPORT.md")
+    legacy_crlf = legacy and actual_report == expected_report.replace(b"\n", b"\r\n")
+    need(actual_report == expected_report or legacy_crlf, "報告與重算結果不符")
     return {"integrity": "MATCH", "judgment_recheck": "MATCH", "verdict": expected["verdict"],
             "total": expected["total"], "counts": expected["counts"],
+            "verification_status": "VERIFIED", "report_line_endings": "LEGACY_CRLF" if legacy_crlf else "LF",
             "source_trust": "USER_CONTROLLED_NOT_INDEPENDENTLY_ATTESTED", "claim_ceiling": CEILING}
 
 
@@ -421,7 +511,15 @@ def doctor():
             "next": "python qa.py demo，或依 START_HERE.md 規劃自己的可信本機專案"}
 
 
+def configure_console():
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if callable(reconfigure):
+            reconfigure(encoding="utf-8", errors="backslashreplace", newline="\n")
+
+
 def main():
+    configure_console()
     parser = argparse.ArgumentParser(description="AKC QA：個人非商業、本機可信專案 QA 預覽版")
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("doctor")
