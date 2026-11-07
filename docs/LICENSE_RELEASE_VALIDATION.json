@@ -1,0 +1,90 @@
+{
+  "date": "2026-11-08",
+  "tool_version": "0.4.0-preview.2",
+  "license_edition": "LicenseRef-AKC-Product-QA-2.0",
+  "source_change": "exactly two presentation strings; no execution/judgment/evidence-format edits",
+  "qa_sha256": "a9c4b5f4846c6a025e03f4009f58a0b01f65b9c71870d4541394b40701ace112",
+  "unchanged_files": [
+    "tests/test_workflow.py",
+    "tools/validate_release.py",
+    ".github/workflows/portable-qa.yml",
+    "docs/RELEASE_VALIDATION.json"
+  ],
+  "demo": {
+    "passed": 5,
+    "total": 5
+  },
+  "legacy_v2_reference_check": {
+    "passed": 1,
+    "scope": "exact previous tool bytes, one real sample, current verifier readback"
+  },
+  "policy_text_review": {
+    "allowed": 9,
+    "requires_separate_permission": 6,
+    "fact_dependent": 6,
+    "total": 21,
+    "authority": "author comparison against explicit PM policy, not legal/runtime pass rate"
+  },
+  "full_matrix_rerun": false,
+  "native_evidence": "prior exact-source Windows/macOS/Linux results conditionally retained; no new native execution claimed",
+  "rights_review": "no observed blocking third-party code/contributor conflict; legal title/AI-output copyrightability not certified",
+  "independent_cross_client_review": "NOT_PERFORMED",
+  "commercial_pilot": "NOT_STARTED_TARGET_AND_AUTHORIZATION_NOT_NAMED",
+  "actual_local_checks": [
+    {
+      "name": "help",
+      "returncode": 0
+    },
+    {
+      "name": "help-cp1252",
+      "returncode": 0
+    },
+    {
+      "name": "help-cp936",
+      "returncode": 0
+    },
+    {
+      "name": "cli-regression",
+      "returncode": 0
+    },
+    {
+      "name": "fail-integrity-regression",
+      "returncode": 0
+    },
+    {
+      "name": "demo",
+      "returncode": 0
+    },
+    {
+      "name": "verify-new",
+      "returncode": 0
+    },
+    {
+      "name": "legacy-v1-lf",
+      "returncode": 0
+    },
+    {
+      "name": "legacy-v1-crlf",
+      "returncode": 0
+    },
+    {
+      "name": "legacy-v2-verify",
+      "returncode": 0
+    },
+    {
+      "name": "stale-plan-refused",
+      "returncode": 2
+    }
+  ],
+  "historical_native_evidence": "RELEASE_VALIDATION.json at baseline 030c16a; source changed only in two presentation strings",
+  "local_environment": {
+    "python": "3.14.5",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O"
+  },
+  "publication_package_review": {
+    "public_files": 24,
+    "relative_links_checked": 23,
+    "bounded_private_path_key_patterns": "NO_MATCH_NOT_SECURITY_AUDIT",
+    "changed_core_functions": false
+  }
+}

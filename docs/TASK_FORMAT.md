@@ -3,7 +3,7 @@
 參考 `examples/discount/qa-task.json`。工作檔與計畫可放在本工具的 `work/`；結果放 `runs/`，兩者均不進 Git。目標專案不需要搬到本工具內。
 
 ```sh
-python3 qa.py plan work/qa-task.json --project-root "/你的/個人專案" --out work/plan-001.json
+python3 qa.py plan work/qa-task.json --project-root "/你的/目標專案" --out work/plan-001.json
 python3 qa.py run work/plan-001.json --approve "上一步完整的plan_id" --out runs/attempt-001
 python3 qa.py verify runs/attempt-001
 ```

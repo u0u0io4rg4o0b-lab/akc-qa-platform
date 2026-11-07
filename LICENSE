@@ -1,47 +1,128 @@
-AKC Personal Noncommercial Source-Available License 1.0
-SPDX-License-Identifier: LicenseRef-AKC-Personal-Noncommercial-1.0
+AKC Product QA and Restricted Services Source-Available License 2.0
+SPDX-License-Identifier: LicenseRef-AKC-Product-QA-2.0
 
-Copyright (c) 2026 AKC QA Platform authors.
+Copyright (c) 2026 AKC QA Platform authors, to the extent of their rights.
 
-1. Permission. Subject to these terms, you may download, copy, study, run,
-   modify, and share this software and its source code solely as a natural
-   person for your own personal, noncommercial learning, experimentation,
-   and testing of personal projects. You may retain personal modifications.
-   Shared copies and modifications must retain this license and copyright
-   notices, identify modifications, and remain subject to these same terms.
-   This permission includes noncommercial repository forks and source sharing.
+1. Scope and definitions
 
-2. Restrictions. You may not use this software or its derivatives to earn
-   revenue, perform paid or compensated QA or other services, support a
-   commercial product or project, conduct business or organizational
-   operations (including internal operations), offer hosted or managed
-   services, resell, sublicense on broader terms, or operate it for others.
-   These restrictions also apply to indirect commercial benefit. Any such
-   use requires a separate prior written license from the relevant rights
-   holder. No automatic conversion to a commercial or unrestricted license
-   occurs over time.
-   For clarity, testing your own commercial product or project is also
-   restricted, even when you do not charge another person for QA.
+"Covered Material" means the AKC QA Platform source code and other material
+distributed under this license, and modifications or derivative works of
+that material to the extent protected by applicable law. "Licensor" means
+each rights holder granting this license, only for rights that holder controls.
+"You" may be an individual, company, developer, or other organization.
 
-3. Scope. This license covers only material for which the licensors have
-   authority to grant these rights. Third-party software retains its own
-   license. Your tested projects and reports do not become licensed under
-   these terms merely because you use this software. No trademark rights
-   or rights to access, test, disclose, or change another person's systems,
-   accounts, or data are granted.
+"Commercial benefit" includes fees, subscriptions, API charges, advertising,
+and substantially equivalent direct or indirect monetization of a restricted
+offering described in section 3. Revenue from a product merely tested with
+the Covered Material is not, by itself, a restricted offering.
 
-4. Termination. Permission ends upon violation of these terms. Rights not
-   expressly granted are reserved. No permission to remove these limits
-   from a derivative is granted.
+2. Permission
 
-5. Disclaimer. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
-   KIND, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A
-   PARTICULAR PURPOSE AND NONINFRINGEMENT. TO THE EXTENT PERMITTED BY
-   APPLICABLE LAW, THE AUTHORS AND RIGHTS HOLDERS ARE NOT LIABLE FOR ANY
-   CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM USE OF THE SOFTWARE.
+Subject to this license, Licensor grants You a nonexclusive, worldwide,
+royalty-free permission to download, copy, study, run, modify, rename,
+integrate, and redistribute the Covered Material for commercial and
+noncommercial purposes, except for the two restricted uses in section 3.
+
+This expressly permits testing products You lawfully develop, own, operate,
+or are authorized to develop, repair, or maintain, including commercial
+products, paid SaaS, websites, apps, internal systems, and products under
+development. It permits enterprise internal QA, CI/CD and quality workflows,
+and internal customization or renaming. Internal modifications need not be
+published. Your identity as a QA company does not exclude these permissions.
+
+It also permits incidental QA during genuine authorized product development,
+repair, or maintenance for a client, and compensated installation,
+configuration, consulting, or integration, when the actual offering is not
+one of the restricted uses in section 3. Free learning, research, modification,
+and sharing are permitted subject to the same terms.
+
+3. Two restricted uses requiring separate permission
+
+Without a separate prior written license from the relevant rights holder(s),
+You may not use the Covered Material or a derivative of it:
+
+(a) to provide to third parties, for commercial benefit, an independent QA
+    testing service or QA report service. Independence is determined from
+    the actual nature of the offering and its deliverables, rather than
+    merely whether QA has a separate invoice line. Genuine incidental
+    quality verification within authorized product development, repair,
+    or maintenance is not automatically an independent QA service; or
+
+(b) to repackage, sell, license, or operate for commercial benefit an
+    externally offered QA product, platform, hosted or managed service,
+    API, or substantially equivalent offering that commercializes the
+    QA capabilities of the Covered Material or its derivatives. This
+    includes selling the repackaged QA tool itself and monetization through
+    subscriptions, API fees, advertising, or equivalent arrangements.
+
+Evaluate the principal and substantive deliverables, actual business model,
+rights in the tested systems, and the role of the Covered Material together.
+Whether You charge a separately named QA fee, use AKC as the primary tool,
+keep its name, change its name, split charges, or bundle services is not
+alone decisive. Renaming or bundling does not avoid a restricted use, and
+being a business or earning revenue does not alone create one.
+
+These restrictions concern commercializing the Covered Material's QA
+services or platform capabilities, not all uses connected with business.
+Where facts are materially uncertain, identify the uncertainty and seek
+clarification from the relevant rights holder(s); uncertainty does not add
+a new category of prohibition to this license.
+
+4. Redistribution conditions
+
+Retain applicable copyright, license, and other rights notices; provide a
+copy of this license with redistributions; and identify modifications.
+Redistributed modifications of Covered Material must remain available under
+these same terms. Do not grant broader permissions for rights You do not
+control. Internal renaming is permitted; notices may be preserved in the
+accompanying source or documentation without requiring a particular UI name.
+
+5. Other software, outputs, and rights
+
+Third-party material keeps its own license; this license does not relicense
+it. Your product source code, data, test results, and reports do not become
+subject to this license merely because You test or generate them using AKC.
+Aggregation or internal integration does not automatically license Your
+separate product under these terms. Any Covered Material actually copied
+into another work remains subject to its applicable terms.
+
+This license does not claim control over independently developed software
+merely because it has similar ideas, concepts, functions, or business models.
+It grants no trademark rights and no permission to access, test, modify,
+or disclose systems, accounts, or data without appropriate authorization.
+Ownership is not transferred. Rights not expressly granted are reserved.
+
+AKC assists with producing, preserving, displaying, and checking test results.
+A check's PASS or evidence MATCH does not establish overall conformity,
+formal acceptance, an independent security audit, unforgeable evidence, or
+independent witnessing. Users and product owners retain their applicable
+rights and responsibilities for scope, data, acceptance, and final decisions.
+
+6. License edition and earlier copies
+
+This version 2.0 applies to copies distributed with this version of the
+license. The repository tag license-v2-20261108 identifies its first
+publication commit. Earlier commits and copies retain the license supplied
+with them; this change does not rewrite their historical terms or revoke
+permissions already validly granted under those terms. Do not describe the
+new commercial permissions as having existed in those older releases.
+
+7. Compliance
+
+Permission under this license ends upon violation of its terms. Separate
+written permissions apply only within the rights and scope they grant.
+No unrestricted or standard open-source license arises automatically over time.
+
+8. Disclaimer
+
+THE COVERED MATERIAL IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. TO THE EXTENT PERMITTED BY APPLICABLE LAW,
+THE AUTHORS AND RIGHTS HOLDERS ARE NOT LIABLE FOR CLAIMS, DAMAGES, OR OTHER
+LIABILITY ARISING FROM ITS USE. This does not replace the project's known
+limitations, safety information, or the need for actual validation.
 
 This is a custom source-available license, not an OSI-approved open-source
-license. The English terms above govern. Chinese convenience summary:
-允許自然人為自己的個人非商業學習與專案測試下載、執行、修改及分享，
-並保留相同授權。禁止營收、付費服務、商業專案、公司／組織營運、
-代營運或託管服務；另行取得書面授權者除外。工具按現狀提供，無保證。
+license. No legal-effect certification is claimed. The English terms govern;
+the Chinese guide in docs/LICENSE_POLICY_20261108.md explains examples and
+does not expand either restriction.

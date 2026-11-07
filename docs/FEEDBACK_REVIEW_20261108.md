@@ -1,5 +1,7 @@
 # Windows 試用回饋與 preview.2
 
+> **歷史紀錄。** 本文保留 Windows 修正輪當時的處置與舊 LICENSE 1.0 解讀。同日後繼 PM 裁決已改採 LICENSE 2.0，允許商業產品與企業內部 QA；目前使用範圍以 [LICENSE](../LICENSE) 與[授權政策](LICENSE_POLICY_20261108.md)為準。下文舊授權判斷不再作為現行禁止商用依據，技術失敗與實測紀錄仍保留。
+
 2026-11-08（臺灣）。回饋描述 Windows 11、Python 3.11.9、Claude Code，preview.1 在自行改一行後 demo／verify 成功，工具自測 19 通過、1 跳過。這是使用者轉述，沒有原始計畫、收據或完整執行紀錄；不能把它提升為本維護者已重現全部 Windows 行為。原版提交 `6d872a43380feb6c5a80e0f2f3bb71ffdc61852f` 及舊失敗保留。
 
 | 回饋 | 核對結論 | 本輪處置／限制 |

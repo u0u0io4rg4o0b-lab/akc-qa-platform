@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""AKC QA personal preview: planned trusted local commands and portable receipts.
+"""AKC QA preview: planned trusted local commands and portable receipts.
 
 No third-party dependencies. This is not an isolation or security boundary.
 """
@@ -520,7 +520,7 @@ def configure_console():
 
 def main():
     configure_console()
-    parser = argparse.ArgumentParser(description="AKC QA：個人非商業、本機可信專案 QA 預覽版")
+    parser = argparse.ArgumentParser(description="AKC QA：可信本機專案測試與證據核對；使用授權見 LICENSE")
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("doctor")
     demo = sub.add_parser("demo")
