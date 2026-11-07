@@ -27,7 +27,7 @@
     }
   },
   "hosted_ci": {
-    "status": "PARTIAL_WINDOWS_MAC_PASS_LINUX_ENVIRONMENT_STOPPED",
+    "status": "PLATFORM_SCOPED_PASS_FIRST_RUN_FAILURE_PRESERVED",
     "first_run": {
       "url": "https://github.com/u0u0io4rg4o0b-lab/akc-qa-platform/actions/runs/42400385870",
       "head_sha": "7976ea9733f4bb10b15f17097b0a9e2cff412429",
@@ -92,7 +92,44 @@
         }
       ]
     },
-    "linux_successor": "PENDING_RUN"
+    "linux_successor": {
+      "url": "https://github.com/u0u0io4rg4o0b-lab/akc-qa-platform/actions/runs/42401005099",
+      "head_sha": "fd7b2b2b8eb214cbfdeec792792b84ac3dfbc11a",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "job_id": 128488518585,
+          "name": "ubuntu-latest Python 3.11.18",
+          "url": "https://github.com/u0u0io4rg4o0b-lab/akc-qa-platform/actions/runs/42401005099/job/128488518585",
+          "conclusion": "success",
+          "summary": {
+            "claim_ceiling": "HOSTED_SYNTHETIC_PLATFORM_VALIDATION_NOT_CLAUDE_OR_FRIEND_ACCEPTANCE",
+            "legacy_verifier": "LF",
+            "new_demo_passed": 5,
+            "new_report": "UTF8_LF",
+            "new_verify": "MATCH",
+            "platform": "Linux-7.0.0-1019-azure-x86_64-with-glibc2.43",
+            "predecessor_checks_passed": 5,
+            "predecessor_commit": "6d872a43380feb6c5a80e0f2f3bb71ffdc61852f",
+            "predecessor_demo_exit": 0,
+            "python": "3.11.18",
+            "tests": {
+              "errors": 0,
+              "failures": 0,
+              "passed": 30,
+              "skipped": 1,
+              "total": 31
+            }
+          }
+        }
+      ]
+    },
+    "scope": "Separate exact-source Windows/macOS and Linux jobs; first full matrix remains failure, not relabeled all-green. Hosted synthetic validation, not friend desktop or new Claude acceptance.",
+    "unchanged_subject_source_across_runs": {
+      "qa.py": "0c39e9b1550d74c832dbfedf8af32560c438b6e9e43dd7d5e6983eb820b1a997",
+      "tests/test_workflow.py": "ccb447bdafd42c964998810f8c1e4ee34a2292bfd0f8a7a85a2cf636e4da1427",
+      "tools/validate_release.py": "6e3a5fdb3afcb62f6726b8ccecda1401034812b02a5b77c3ec727fd3222be7ac"
+    }
   },
   "friend_feedback": {
     "status": "USER_FORWARDED_REPORT_ORIGINAL_ARTIFACTS_UNAVAILABLE",

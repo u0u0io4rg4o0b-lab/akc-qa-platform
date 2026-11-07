@@ -37,6 +37,16 @@ CI 使用當下可解析的官方固定 tag SHA。setup-python v7.1.0 發行日�
 
 第一輪 [CI 42400385870](https://github.com/u0u0io4rg4o0b-lab/akc-qa-platform/actions/runs/42400385870) 的整體 **failure** 保留：Windows31/31、macOS30通過/1個Windows專屬skip；Linux在測試前停止，因 ubuntu-latest 已是26.04，舊Python3.11.9沒有該平台安裝包。不是Linux產品測試失敗。官方 [python-versions 安裝清單](https://github.com/actions/python-versions/blob/main/versions-manifest.json)當次有3.11.18／Ubuntu26.04對應檔，因此只修正Linux驗證環境並另跑Linux；qa.py、測具及CI驗證程式不變。後繼結果分開列在發布驗證，不把兩次倒寫成第一輪全綠。
 
+Linux 後繼 [CI 42401005099](https://github.com/u0u0io4rg4o0b-lab/akc-qa-platform/actions/runs/42401005099) 已完成。各平台的測試控制與樣例分開計數：
+
+| 原生平台／Python | 工具測試 | 新版樣例／核對 | 固定舊版對照 |
+|---|---|---|---|
+| Windows CI／3.11.9 | 31通過，0失敗，0跳過 | 五項PASS，UTF-8／LF報告，verify MATCH | 舊版五項PASS但demo rc2；新版可明示讀回舊CRLF包 |
+| macOS CI／3.14.10 | 30通過，0失敗，1 Windows專屬跳過 | 五項PASS，LF，verify MATCH | 舊版正常；舊LF包可核對 |
+| Linux CI／3.11.18 | 30通過，0失敗，1 Windows專屬跳過 | 五項PASS，LF，verify MATCH | 舊版正常；舊LF包可核對 |
+
+Windows/macOS 受測提交為 `7976ea9733f4bb10b15f17097b0a9e2cff412429`，Linux 為CI環境後繼 `fd7b2b2b8eb214cbfdeec792792b84ac3dfbc11a`。已逐位元組確認 qa.py、test_workflow.py、validate_release.py 在兩個提交相同；只修CI環境，不借用不同產品原碼的結果。以上是各自的原生合成觀察，不是單次全平台矩陣全綠、整套產品驗收或朋友新版回測。Windows CI 的 API 旗標通過亦不證明 pythonw 桌面視覺或完整程序樹清理。
+
 ## 尚缺資料與下一個 Gate
 
 本輪換行、編碼及報告修正不需要等待額外大規模研究。以下只有在要擴大相應承諾時才是必要差額：
