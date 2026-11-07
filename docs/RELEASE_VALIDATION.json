@@ -5,7 +5,7 @@
     "qa.py": "0c39e9b1550d74c832dbfedf8af32560c438b6e9e43dd7d5e6983eb820b1a997",
     "tests/test_workflow.py": "ccb447bdafd42c964998810f8c1e4ee34a2292bfd0f8a7a85a2cf636e4da1427",
     "tools/validate_release.py": "6e3a5fdb3afcb62f6726b8ccecda1401034812b02a5b77c3ec727fd3222be7ac",
-    ".github/workflows/portable-qa.yml": "d252b07f088094fb96a00c7a42f22f0538eaec02b15ae293346c2c898ea4fc06"
+    ".github/workflows/portable-qa.yml": "39fa60ceab6bb2a04ebda78c8316620e5d898cdcf946509488d5bbe11d4a9270"
   },
   "local_validation": {
     "claim_ceiling": "HOSTED_SYNTHETIC_PLATFORM_VALIDATION_NOT_CLAUDE_OR_FRIEND_ACCEPTANCE",
@@ -26,7 +26,74 @@
       "total": 31
     }
   },
-  "hosted_ci": "PENDING_NATIVE_RUN",
+  "hosted_ci": {
+    "status": "PARTIAL_WINDOWS_MAC_PASS_LINUX_ENVIRONMENT_STOPPED",
+    "first_run": {
+      "url": "https://github.com/u0u0io4rg4o0b-lab/akc-qa-platform/actions/runs/42400385870",
+      "head_sha": "7976ea9733f4bb10b15f17097b0a9e2cff412429",
+      "conclusion": "failure",
+      "jobs": [
+        {
+          "job_id": 128486668164,
+          "name": "windows-latest Python 3.11.9",
+          "url": "https://github.com/u0u0io4rg4o0b-lab/akc-qa-platform/actions/runs/42400385870/job/128486668164",
+          "conclusion": "success",
+          "summary": {
+            "claim_ceiling": "HOSTED_SYNTHETIC_PLATFORM_VALIDATION_NOT_CLAUDE_OR_FRIEND_ACCEPTANCE",
+            "legacy_verifier": "LEGACY_CRLF",
+            "new_demo_passed": 5,
+            "new_report": "UTF8_LF",
+            "new_verify": "MATCH",
+            "platform": "Windows-10-10.0.26100-SP0",
+            "predecessor_checks_passed": 5,
+            "predecessor_commit": "6d872a43380feb6c5a80e0f2f3bb71ffdc61852f",
+            "predecessor_demo_exit": 2,
+            "python": "3.11.9",
+            "tests": {
+              "errors": 0,
+              "failures": 0,
+              "passed": 31,
+              "skipped": 0,
+              "total": 31
+            }
+          }
+        },
+        {
+          "job_id": 128486668186,
+          "name": "ubuntu-latest Python 3.11.9",
+          "url": "https://github.com/u0u0io4rg4o0b-lab/akc-qa-platform/actions/runs/42400385870/job/128486668186",
+          "conclusion": "failure",
+          "summary": null
+        },
+        {
+          "job_id": 128486668196,
+          "name": "macos-latest Python 3.14",
+          "url": "https://github.com/u0u0io4rg4o0b-lab/akc-qa-platform/actions/runs/42400385870/job/128486668196",
+          "conclusion": "success",
+          "summary": {
+            "claim_ceiling": "HOSTED_SYNTHETIC_PLATFORM_VALIDATION_NOT_CLAUDE_OR_FRIEND_ACCEPTANCE",
+            "legacy_verifier": "LF",
+            "new_demo_passed": 5,
+            "new_report": "UTF8_LF",
+            "new_verify": "MATCH",
+            "platform": "macOS-26.7.2-arm64-arm-64bit-Mach-O",
+            "predecessor_checks_passed": 5,
+            "predecessor_commit": "6d872a43380feb6c5a80e0f2f3bb71ffdc61852f",
+            "predecessor_demo_exit": 0,
+            "python": "3.14.10",
+            "tests": {
+              "errors": 0,
+              "failures": 0,
+              "passed": 30,
+              "skipped": 1,
+              "total": 31
+            }
+          }
+        }
+      ]
+    },
+    "linux_successor": "PENDING_RUN"
+  },
   "friend_feedback": {
     "status": "USER_FORWARDED_REPORT_ORIGINAL_ARTIFACTS_UNAVAILABLE",
     "os": "Windows 11",

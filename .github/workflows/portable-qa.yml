@@ -2,6 +2,14 @@ name: Portable QA validation
 
 on:
   workflow_dispatch:
+    inputs:
+      platform:
+        description: Validate all platforms, or only the affected Linux environment
+        type: choice
+        default: all
+        options:
+          - all
+          - linux
 
 permissions:
   contents: read
@@ -13,14 +21,8 @@ jobs:
     timeout-minutes: 10
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - os: windows-latest
-            python: '3.11.9'
-          - os: ubuntu-latest
-            python: '3.11.9'
-          - os: macos-latest
-            python: '3.14'
+      matrix: >-
+        ${{ fromJSON(inputs.platform == 'linux' && '{"include":[{"os":"ubuntu-latest","python":"3.11.18"}]}' || '{"include":[{"os":"windows-latest","python":"3.11.9"},{"os":"ubuntu-latest","python":"3.11.18"},{"os":"macos-latest","python":"3.14"}]}') }}
     env:
       PYTHONIOENCODING: utf-8
       AKC_QA_TEST_TIMEOUT_SCALE: '2'

@@ -4,7 +4,7 @@
 
 | 回饋 | 核對結論 | 本輪處置／限制 |
 |---|---|---|
-| Windows 報告 CRLF 對不上 LF 重算 | 程式路徑吻合；Mac 模擬同一文字換行機制，真跑五項 PASS 後重現原 BLOCKED | 新報告直接寫 UTF-8／LF bytes；未放寬新版逐位元組驗證。另安排固定原版與新版的原生平台對照 |
+| Windows 報告 CRLF 對不上 LF 重算 | 程式路徑吻合；Mac 模擬重現，且 Windows CI 原生以 Python3.11.9 重跑固定舊版，確定五項 PASS 後因報告核對而 rc2 | 新版同一 Windows job 的31項控制、五項樣例及 verify 通過，報告為UTF-8／LF；舊CRLF包也能明示相容讀回。沒有宣稱朋友已回測新版 |
 | cp936／cp1252 輸出 | 指定 PYTHONIOENCODING 重現 cp1252 doctor rc2、cp936 非 UTF-8 輸出 | CLI stdout／stderr 固定 UTF-8；測成功與錯誤路徑。不替受測子程式改編碼，也不能修好讀取端自行選錯解碼 |
 | FAIL 沒原因 | 原 judge 只回狀態；確定缺少可操作診斷 | 原因碼、預期／實際退出碼寫入原生收據、摘要及報告，verify 一併重算 |
 | 無害警告判 FAIL | 符合舊明文契約，不足以認定產品有 bug；回饋沒有那次完整 stderr，無法判斷它是否無害 | 保留嚴格預設；允許事前完整指定 expected_stderr，額外訊息仍拒絕；不加全域忽略／任意 regex |
@@ -34,6 +34,8 @@
 Node 警告處置只補有界操作指引。[官方 CLI 文件](https://nodejs.org/api/cli.html#--disable-warningcode-or-type)支持選定 warning code/type，該頁本輪沒有可核更新日，不計近三個月主證。11/8 在本機 Node v26.0.0 真執行三個新控制：預設警告存在、具名 ExperimentalWarning 可停用、其他錯誤仍保留 stderr 與退出碼 1。這是新量測，沒有宣稱本機 Node 是最新版；朋友沒有提供 Node 版本，故仍需在其版本確認。核心不依賴 Node，也不默默加任何隱藏警告參數。
 
 CI 使用當下可解析的官方固定 tag SHA。setup-python v7.1.0 發行日期為 2026-10-22，符合窗口；checkout v7.0.1 為 2026-07-20，雖是當下最新穩定發行，也不算近三個月研究主證。保留其精確來源作既有工具依賴，經本次實跑再判斷，不為補日期選未發布程式。沒有把過時來源當成新的 Agent 能力證明。
+
+第一輪 [CI 42400385870](https://github.com/u0u0io4rg4o0b-lab/akc-qa-platform/actions/runs/42400385870) 的整體 **failure** 保留：Windows31/31、macOS30通過/1個Windows專屬skip；Linux在測試前停止，因 ubuntu-latest 已是26.04，舊Python3.11.9沒有該平台安裝包。不是Linux產品測試失敗。官方 [python-versions 安裝清單](https://github.com/actions/python-versions/blob/main/versions-manifest.json)當次有3.11.18／Ubuntu26.04對應檔，因此只修正Linux驗證環境並另跑Linux；qa.py、測具及CI驗證程式不變。後繼結果分開列在發布驗證，不把兩次倒寫成第一輪全綠。
 
 ## 尚缺資料與下一個 Gate
 
