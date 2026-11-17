@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "purpose": "Explicit release population; intentional ID changes require review. This is not proof of test semantic adequacy.",
+  "required_test_ids": [
+    "test_release_gate.ReleaseGateTests.test_complete_real_runner_results_are_accepted",
+    "test_release_gate.ReleaseGateTests.test_discovery_rejects_missing_wrong_target_duplicates_and_zero",
+    "test_release_gate.ReleaseGateTests.test_expected_failure_and_early_stop_cannot_qualify_for_release",
+    "test_release_gate.ReleaseGateTests.test_only_named_skip_with_exact_reason_is_allowed",
+    "test_release_gate.ReleaseGateTests.test_real_runner_skip_is_successful_but_release_is_blocked",
+    "test_workflow.WorkflowTests.test_bool_not_integer",
+    "test_workflow.WorkflowTests.test_clean_copy_cli_works_in_unicode_space_path",
+    "test_workflow.WorkflowTests.test_cli_utf8_in_cp1252_and_cp936_environment",
+    "test_workflow.WorkflowTests.test_duplicate_key_and_trailing_output_rejected",
+    "test_workflow.WorkflowTests.test_empty_json_output_is_inconclusive",
+    "test_workflow.WorkflowTests.test_empty_suite_exit_zero_is_not_qa_pass",
+    "test_workflow.WorkflowTests.test_existing_attempt_cannot_be_replayed",
+    "test_workflow.WorkflowTests.test_expected_stderr_is_exact_not_blanket_ignore",
+    "test_workflow.WorkflowTests.test_fail_reasons_distinguish_output_and_warning",
+    "test_workflow.WorkflowTests.test_known_product_fault_is_fail_and_later_cases_not_run",
+    "test_workflow.WorkflowTests.test_missing_case_cannot_reduce_denominator",
+    "test_workflow.WorkflowTests.test_native_windows_no_console_window_flag_applied",
+    "test_workflow.WorkflowTests.test_non_pass_states_leave_declared_requirements_unverified",
+    "test_workflow.WorkflowTests.test_nonempty_stderr_fails_even_if_stdout_matches",
+    "test_workflow.WorkflowTests.test_not_run_requirement_is_not_presented_as_verified",
+    "test_workflow.WorkflowTests.test_output_limit_is_not_pass",
+    "test_workflow.WorkflowTests.test_output_tamper_is_rejected",
+    "test_workflow.WorkflowTests.test_path_traversal_refused",
+    "test_workflow.WorkflowTests.test_real_subject_and_relocated_evidence",
+    "test_workflow.WorkflowTests.test_reason_and_preview_tamper_rejected_even_after_rehash",
+    "test_workflow.WorkflowTests.test_rehashed_false_green_is_rejected_by_semantic_recheck",
+    "test_workflow.WorkflowTests.test_report_bytes_do_not_use_windows_text_translation",
+    "test_workflow.WorkflowTests.test_requirement_gap_is_visible_in_run_report_and_verify_cli",
+    "test_workflow.WorkflowTests.test_source_drift_refused_before_launch",
+    "test_workflow.WorkflowTests.test_source_mutated_by_command_is_inconclusive",
+    "test_workflow.WorkflowTests.test_symlink_refused",
+    "test_workflow.WorkflowTests.test_timeout_keeps_partial_evidence",
+    "test_workflow.WorkflowTests.test_unlisted_evidence_refused",
+    "test_workflow.WorkflowTests.test_untrusted_tail_cannot_inject_html_or_table_cells",
+    "test_workflow.WorkflowTests.test_verify_fail_exit_one_still_has_integrity_match",
+    "test_workflow.WorkflowTests.test_wrong_approval_does_not_start_or_create_output",
+    "test_workflow.WorkflowTests.test_wrong_exit_is_reported_with_tail_but_no_inferred_case_count",
+    "test_workflow.WorkflowTests.test_zero_cases_and_duplicate_case_ids_refused"
+  ],
+  "allowed_skips": {
+    "posix": {
+      "test_workflow.WorkflowTests.test_native_windows_no_console_window_flag_applied": "native Windows flag check"
+    },
+    "nt": {
+      "test_workflow.WorkflowTests.test_symlink_refused": "Windows symlink privilege unavailable (winerror 1314)"
+    }
+  }
+}

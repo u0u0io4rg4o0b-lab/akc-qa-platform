@@ -1,10 +1,12 @@
 # 版本與證據範圍
 
-工具版本：`0.4.0-preview.2`；目前授權：`LicenseRef-AKC-Product-QA-2.0`。允許商業產品與企業內部 QA，兩類對外營利 QA 服務／平台再商業化另需授權，見 LICENSE 與 [政策說明](LICENSE_POLICY_20261108.md)。
+發布狀態：**preview.3 為待覆核候選，尚未採用至 main**。fresh Claude 覆核因既有 OAuth 過期未完成；不以作者測試代替，詳見本輪驗證資料。
+
+工具版本：`0.4.0-preview.3`；目前授權仍為 `LicenseRef-AKC-Product-QA-2.0`。允許商業產品與企業內部 QA，兩類對外營利 QA 服務／平台再商業化另需授權，見 LICENSE 與 [政策說明](LICENSE_POLICY_20261108.md)。
 
 可用：本機計畫、直接命令執行、JSON 判讀、命令退出狀態、原始輸出、報告與離線核對。只使用 Python 3.11+ 標準函式庫。原始版本歷史與私人收據不包含在此公開包。
 
-Windows 修正輪的歷史精確環境、次數及結果見 [RELEASE_VALIDATION.json](RELEASE_VALIDATION.json)。本次授權後繼的來源變更與回歸界線另見 [LICENSE_RELEASE_VALIDATION.json](LICENSE_RELEASE_VALIDATION.json)，不能把舊提交的原生測試改稱新提交已原生重跑。工具自測與五項樣例分開計數，樣例不是實際商業專案的 QA。
+Windows 修正輪的歷史精確環境、次數及結果見 [RELEASE_VALIDATION.json](RELEASE_VALIDATION.json)，授權輪另見 [LICENSE_RELEASE_VALIDATION.json](LICENSE_RELEASE_VALIDATION.json)。2026-11-17反向審查及當前驗證見 [本輪報告](ADVERSARIAL_REVIEW_20261117.md)與 [驗證資料](ADVERSARIAL_VALIDATION.json)。不能把舊提交的原生測試改稱新提交已原生重跑；工具自測與五項樣例分開計數，樣例不是實際商業專案的 QA。
 
 | 範圍 | 狀態／界線 |
 |---|---|
@@ -16,8 +18,10 @@ Windows 修正輪的歷史精確環境、次數及結果見 [RELEASE_VALIDATION.
 | 安全審計／正式產品驗收 | 未完成，不能由工具自測升格 |
 | 自動影響分析／自動回歸沿用 | 不提供；Agent 應根據實際變更規劃並說明理由 |
 
-本輪目標是修正公開授權、文件並更新 GitHub，沒有要求維護者先提供新商業試點的發布門檻。後續開發者可自行下載、依授權測試自己的專案，並選擇是否回饋；既有專案的開發與測試依其原本進度續行。見 [後續使用與自願回饋](COMMERCIAL_PILOT.md)。一般使用不必向維護者提交專案；外部使用成效仍須看實際回報，沒有新回報時保留未知。
+目前推進的是重要失敗情境、結果消費及發布判準的有界修正，不要求維護者提供新商業試點。後續開發者可自行下載、依授權測試自己的專案並選擇是否回饋；既有專案依原進度續行。見 [後續使用與自願回饋](COMMERCIAL_PILOT.md)。一般使用不必提交專案；外部使用成效仍依實際回報，沒有回報時保留未知。
 
 [逐項回饋、研究與採納判斷](FEEDBACK_REVIEW_20261108.md)。Windows 完整程序樹清理仍是已明示限制；視為另個有實測需求的 Gate，不由本輪換行與報告修正升格成已解決。
 
 11/8 原生 CI 已取得 Windows 31通過、macOS／Linux各30通過＋1個Windows專屬跳過，三者各自五項樣例及證據核對通過。第一輪 Linux 的安裝包準備失敗仍保留；只在CI環境後繼重跑Linux，工具／測具／驗證器來源相同。各次提交、完整分母與未證範圍見發布驗證，不相加成產品成功率。
+
+11/17 preview.3 候選 CI：Windows38通過；macOS／Linux各37通過＋1個具名Windows專屬跳過，三者各自五項樣例及preview.1／.2相容讀回通過。來源提交9c000f6及完整資料見本輪驗證；fresh覆核仍未完成，main採用保留。

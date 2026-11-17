@@ -1,10 +1,12 @@
 # AKC QA Platform
 
+> **preview.3 待覆核候選**：本分支尚未採用至 main；fresh 跨客戶端覆核因既有登入失效未完成，詳見本輪審查。main 保留原公開版本。
+
 **協助個人、開發者、企業與 Agent 理解需求、執行本機測試並核對證據的 QA 輔助系統。**
 
 下載這個資料夾，用能讀寫本機檔案、執行終端命令的 Agent 開啟，告訴它你想測哪個自己的專案即可。工具本身不用 API key、不安裝第三方套件。模型服務、受測專案及其依賴由使用者自行準備。
 
-> 工具版本 `0.4.0-preview.2`；目前授權為 **AKC Product QA 2.0**。允許測試自己的商業／非商業產品、企業內部 QA 與 CI/CD，以及合法受託開發／修復／維護中的附帶 QA。對外獨立營利 QA 服務，以及重新包裝、販售或營利性託管 AKC QA 能力，需另行授權。這是 **source-available（公開原始碼）**，不是 OSI 認可的開源授權。見 [LICENSE](LICENSE) 與[允許／限制／灰色情境](docs/LICENSE_POLICY_20261108.md)。
+> 工具版本 `0.4.0-preview.3`；目前授權為 **AKC Product QA 2.0**。允許測試自己的商業／非商業產品、企業內部 QA 與 CI/CD，以及合法受託開發／修復／維護中的附帶 QA。對外獨立營利 QA 服務，以及重新包裝、販售或營利性託管 AKC QA 能力，需另行授權。這是 **source-available（公開原始碼）**，不是 OSI 認可的開源授權。見 [LICENSE](LICENSE) 與[允許／限制／灰色情境](docs/LICENSE_POLICY_20261108.md)。
 
 ## 開始
 
@@ -32,7 +34,7 @@ python3 qa.py demo
 
 每次結果使用新目錄，失敗後停止後續檢查，修復後建立新計畫與新結果。依變更影響選擇必要檢查；本版沒有自動推導依賴或沿用舊證據的功能。
 
-preview.2 修正 Windows 報告換行及 CLI 輸出編碼，補上失敗原因、退出碼、輸出摘要與未執行需求。舊版證據仍可讀回；升級後執行測試需建立新計畫。逐項處置與實測邊界見 [Windows 回饋審查](docs/FEEDBACK_REVIEW_20261108.md)。
+preview.2 修正 Windows 報告換行與編碼；preview.3 補足 `verify` 的需求清單、報告中的需求狀態，以及發布必要自測的發現／實跑／跳過核對。PASS 仍只指已列檢查；`requirements_status` 分開顯示已列需求狀態，`goal_completion` 明示整體目標未由執行器裁定。preview.1／preview.2 舊證據可讀回，升級後執行須重建計畫。見 [Windows 歷史回饋](docs/FEEDBACK_REVIEW_20261108.md)與[本輪反向審查](docs/ADVERSARIAL_REVIEW_20261117.md)。
 
 ## 使用範圍
 

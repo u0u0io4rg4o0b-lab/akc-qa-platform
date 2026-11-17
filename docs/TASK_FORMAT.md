@@ -36,9 +36,11 @@ Node 可先核對自己的 `node --version`／`node --help`，若該版本支援
 
 結果資料夾包含 plan.json、attempt.json、逐項 native.json／stdout.bin／stderr.bin、result.json、REPORT.md、manifest.json。完整收據才可 verify；中斷後沒有完整 manifest 的目錄屬未完成，不能把目錄存在當通過。核對工具會重算判讀與案例分母；使用者仍可同時偽造整包，hash 不提供外部可信性。
 
-preview.2 的 result schema 為 2。native.json 含 assessment（verdict、reason_codes）；摘要與報告同時重算原因、退出碼及輸出預覽。報告分列未配置檢查、所列檢查全部 NOT_RUN，以及所列檢查尚未全部取得行為 PASS 的需求；這些都只以本計畫的案例為分母。
+preview.3 的 result schema 為 3，preview.2 的歷史 schema 為 2。native.json 含 assessment（verdict、reason_codes）；摘要與報告同時重算原因、退出碼及輸出預覽。run、report、verify 均提供未配置檢查、所列檢查全部 NOT_RUN，以及所列檢查尚未全部取得行為 PASS 的需求；這些都只以本計畫為分母。
 
-可讀回 preview.1 的舊 schema／舊報告。僅對該舊版，允許完全符合原報告內容的 LF 或已知 CRLF 寫入格式，且先驗原 manifest；不改寫舊包、不忽略其他內容差異。新包一律使用 UTF-8／LF 位元組。舊計畫不能直接執行，請以新版重建並核對新 plan_id。
+`requirements_status=UNVERIFIED` 表示仍有已列需求未全部取得行為 PASS；否則為 `ALL_DECLARED_REQUIREMENTS_HAVE_PASSING_CHECKS`。它不證明需求／案例完整或正解可信。`goal_completion=NOT_ASSESSED_BY_RUNNER` 明示整體目標須由 Agent 依 [判讀與 Gate](DECISION_REVIEW.md) 另行裁決。局部 PASS 可以與 UNVERIFIED 並存；CLI rc0 也不代表目標完成。verify 對舊包僅在回傳中補足這些資訊，不改寫原始摘要與報告。
+
+可讀回 preview.1／preview.2 的舊 schema／舊報告。僅對 preview.1，允許完全符合原報告內容的 LF 或已知 CRLF 寫入格式，且先驗原 manifest；不改寫舊包、不忽略其他內容差異。新包一律使用 UTF-8／LF 位元組。舊計畫不能直接執行，請以新版重建並核對新 plan_id。
 
 FAIL 表示已完成觀察違反指定判準；格式、逾時、截斷、執行／來源變更等為 INCONCLUSIVE；前項失敗後為 NOT_RUN。CLI：成功／純命令完成為 0，FAIL／INCONCLUSIVE 為 1，無法准入或證據核對失敗為 2。輸出限制、逾時及取消只提供盡力停止，detached child 與回滾未知，不可自動重送。
 
