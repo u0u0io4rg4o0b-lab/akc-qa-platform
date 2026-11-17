@@ -23,3 +23,5 @@ Windows 修正輪的歷史精確環境、次數及結果見 [RELEASE_VALIDATION.
 [逐項回饋、研究與採納判斷](FEEDBACK_REVIEW_20261108.md)。Windows 完整程序樹清理仍是已明示限制；視為另個有實測需求的 Gate，不由本輪換行與報告修正升格成已解決。
 
 11/8 原生 CI 已取得 Windows 31通過、macOS／Linux各30通過＋1個Windows專屬跳過，三者各自五項樣例及證據核對通過。第一輪 Linux 的安裝包準備失敗仍保留；只在CI環境後繼重跑Linux，工具／測具／驗證器來源相同。各次提交、完整分母與未證範圍見發布驗證，不相加成產品成功率。
+
+11/17 preview.3 候選 CI：Windows38通過；macOS／Linux各37通過＋1個具名Windows專屬跳過，三者各自五項樣例及preview.1／.2相容讀回通過。來源提交9c000f6及完整資料見本輪驗證；fresh覆核仍未完成，main採用保留。
