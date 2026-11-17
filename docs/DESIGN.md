@@ -9,6 +9,8 @@
 | 不把命令成功當 QA | rc 0 但 JSON 錯、空輸出或僅 exit_code | 完整 JSON 判讀；EXIT_MATCH 與 PASS 分開 |
 | 計畫與執行相符 | 來源、執行器、工具或環境變更 | 執行前、逐項前後核對；不自動重新批准 |
 | 保留失敗與未測 | 第一項 FAIL、逾時、截斷 | 原始輸出保留；後續 NOT_RUN；新 attempt 才能另跑 |
+| 不把局部 PASS 當需求／目標完成 | 已列檢查通過但有未配置需求，或重要風險根本未入計畫 | run／report／verify分列已列需求狀態；整體目標由Agent依來源與風險另裁決 |
+| 發布必要自測不意外縮水 | 必要案例遺失、錯選目標、非預期skip或未完成 | required_cases.json列案例身分與平台例外；核對discovery、實跑與成功／跳過結果，不只看wasSuccessful |
 | 證據可攜 | 原專案不在，證據搬到別處 | manifest 人口核對、重算判讀及報告；不是原始執行見證 |
 | 跨 Agent | Codex、Claude、其他本機 Agent | 共用 START_HERE＋AGENTS；CLAUDE 匯入；真跨客戶端驗收另列狀態 |
 | 產品 QA 可商用，兩類對外商業化受限 | 企業內部與合法開發維護可用；獨立營利 QA／對外營利 QA 平台另授權 | 自訂 LICENSE 2.0 與情境對照，不標成 MIT／Apache 或 OSI 開源 |

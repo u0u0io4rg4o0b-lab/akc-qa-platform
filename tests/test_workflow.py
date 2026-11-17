@@ -198,8 +198,10 @@ class WorkflowTests(unittest.TestCase):
     def test_symlink_refused(self):
         try:
             (self.project / "link.py").symlink_to(self.project / "discount.py")
-        except OSError:
-            self.skipTest("symlink creation unavailable on this host")
+        except OSError as error:
+            if os.name == "nt" and getattr(error, "winerror", None) == 1314:
+                self.skipTest("Windows symlink privilege unavailable (winerror 1314)")
+            raise
         with self.assertRaises(qa.QAError):
             qa.regular(qa.member(self.project, "link.py"))
 
@@ -279,7 +281,43 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual(result["unexecuted_requirement_ids"], ["R02"])
         self.assertEqual(result["unverified_requirement_ids"], ["R01", "R02"])
         self.assertIn("因所列檢查未執行而未驗證的需求：R02", (out / "REPORT.md").read_text(encoding="utf-8"))
-        self.assertEqual(qa.verify(out)["verdict"], "FAIL")
+        verified = qa.verify(out)
+        self.assertEqual(verified["verdict"], "FAIL")
+        self.assertEqual(verified["requirements_status"], "UNVERIFIED")
+        self.assertEqual(verified["unexecuted_requirement_ids"], ["R02"])
+
+    def test_requirement_gap_is_visible_in_run_report_and_verify_cli(self):
+        task = copy.deepcopy(self.task)
+        task["checks"] = task["checks"][:1]
+        result, out = self.execute(task)
+        self.assertEqual(result["verdict"], "PASS")  # local check remains a valid PASS
+        self.assertEqual(result["requirements_status"], "UNVERIFIED")
+        self.assertEqual(result["unverified_requirement_ids"], ["R02"])
+        self.assertEqual(result["goal_completion"], "NOT_ASSESSED_BY_RUNNER")
+        text = (out / "REPORT.md").read_text(encoding="utf-8")
+        self.assertIn("已列檢查判讀：**PASS**", text)
+        self.assertIn("已列需求狀態：**UNVERIFIED**", text)
+        cli = subprocess.run([sys.executable, "-B", str(ROOT / "qa.py"), "verify", str(out)],
+                             capture_output=True, timeout=60 * TIMEOUT_SCALE)
+        self.assertEqual(cli.returncode, 0)  # compatibility: rc0 does not mean goal complete
+        verified = json.loads(cli.stdout)
+        self.assertEqual(verified["integrity"], "MATCH")
+        self.assertEqual(verified["declared_requirement_count"], 2)
+        for field in ("requirements_status", "uncovered_requirement_ids", "unverified_requirement_ids", "goal_completion"):
+            self.assertEqual(verified[field], result[field])
+
+    def test_non_pass_states_leave_declared_requirements_unverified(self):
+        cases = [("pass\n", "exit_code", "COMMANDS_COMPLETED_QA_UNCONFIRMED"),
+                 ("print('not JSON')\n", "json_equals", "INCONCLUSIVE"),
+                 ("print('{\"cents\":91}')\n", "json_equals", "FAIL")]
+        for index, (code, mode, verdict) in enumerate(cases):
+            with self.subTest(verdict=verdict):
+                task = self.custom(code)
+                task["checks"][0]["mode"] = mode
+                result, out = self.execute(task, name="coverage-" + str(index))
+                self.assertEqual(result["verdict"], verdict)
+                self.assertEqual(result["unverified_requirement_ids"], ["R01", "R02"])
+                self.assertEqual(qa.verify(out)["requirements_status"], "UNVERIFIED")
 
     def test_verify_fail_exit_one_still_has_integrity_match(self):
         task = self.custom("print('{\"cents\":91}')\n")

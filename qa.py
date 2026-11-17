@@ -20,8 +20,9 @@ import threading
 import time
 import uuid
 
-VERSION = "0.4.0-preview.2"
+VERSION = "0.4.0-preview.3"
 LEGACY_VERSION = "0.4.0-preview.1"
+PREVIOUS_VERSION = "0.4.0-preview.2"
 BASE = Path(__file__).resolve().parent
 MAX_FILE = 4 * 1024 * 1024
 MAX_OUTPUT = 1024 * 1024
@@ -191,7 +192,7 @@ def check_plan(value, live=False):
     body = value["plan"]
     legacy = body["tool_version"] == LEGACY_VERSION
     validate(body["task"], legacy=legacy)
-    supported = {VERSION} if live else {VERSION, LEGACY_VERSION}
+    supported = {VERSION} if live else {VERSION, LEGACY_VERSION, PREVIOUS_VERSION}
     need(body["tool_version"] in supported and body["claim_ceiling"] == CEILING,
          "計畫版本或結論範圍不符")
     need(body["execution_profile"] == "trusted-local-direct-command"
@@ -354,7 +355,25 @@ def summary(plan, records):
                                                 if states and all(state == "NOT_RUN" for state in states)],
                      unverified_requirement_ids=[key for key, states in by_requirement.items()
                                                 if not states or any(state != "PASS" for state in states)])
+    if plan["plan"]["tool_version"] == VERSION:
+        value.update(schema_version=3, **requirement_coverage(plan, records))
     return value
+
+
+def requirement_coverage(plan, records):
+    checks = plan["plan"]["task"]["checks"]
+    requirements = plan["plan"]["task"]["requirements"]
+    need(len(records) == len(checks), "案例分母不符")
+    states = {req["id"]: [row["verdict"] for check, row in zip(checks, records)
+                          if check["requirement_id"] == req["id"]] for req in requirements}
+    unverified = [key for key, values in states.items() if not values or any(v != "PASS" for v in values)]
+    return {"declared_requirement_count": len(requirements),
+            "requirements_status": "UNVERIFIED" if unverified else "ALL_DECLARED_REQUIREMENTS_HAVE_PASSING_CHECKS",
+            "uncovered_requirement_ids": [key for key, values in states.items() if not values],
+            "unexecuted_requirement_ids": [key for key, values in states.items()
+                                          if values and all(v == "NOT_RUN" for v in values)],
+            "unverified_requirement_ids": unverified,
+            "goal_completion": "NOT_ASSESSED_BY_RUNNER"}
 
 
 def report_v1(value):
@@ -382,6 +401,10 @@ def report(value):
     lines = ["# AKC QA 本機結果", "", "結果：**" + value["verdict"] + "**；計畫 `" + value["plan_id"] + "`。",
              "", "已列檢查 %s 項：%s。" % (value["total"], json.dumps(value["counts"], ensure_ascii=False)),
              "", "| 檢查 | 判讀 | 原因碼 | 預期／實際退出碼 | 原始證據 |", "|---|---|---|---|---|"]
+    if value["schema_version"] >= 3:
+        lines[2] = "已列檢查判讀：**" + value["verdict"] + "**；計畫 `" + value["plan_id"] + "`。"
+        lines[3:3] = ["", "已列需求狀態：**" + value["requirements_status"] + "**（%s 項）。" % value["declared_requirement_count"],
+                      "整體目標完成：**未由執行器裁定**；尚須核對目標的重要風險、遺漏情境與正解來源。"]
     for item in value["checks"]:
         lines.append("| %s | %s | %s | %s / %s | [收據](checks/%s/native.json) |" %
                      (item["id"], item["verdict"], ", ".join(item["reason_codes"]), item["expected_exit"],
@@ -501,7 +524,8 @@ def verify(root):
     return {"integrity": "MATCH", "judgment_recheck": "MATCH", "verdict": expected["verdict"],
             "total": expected["total"], "counts": expected["counts"],
             "verification_status": "VERIFIED", "report_line_endings": "LEGACY_CRLF" if legacy_crlf else "LF",
-            "source_trust": "USER_CONTROLLED_NOT_INDEPENDENTLY_ATTESTED", "claim_ceiling": CEILING}
+            "source_trust": "USER_CONTROLLED_NOT_INDEPENDENTLY_ATTESTED", "claim_ceiling": CEILING,
+            **requirement_coverage(plan, records)}
 
 
 def doctor():
